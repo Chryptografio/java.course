@@ -1,4 +1,4 @@
-package com.alieno;
+package com.problems;
 
 /**
  * Задача 1*
@@ -15,36 +15,26 @@ package com.alieno;
  *
  * Для вывода только одного знака дробной части вещественного числа можно воспользоваться методом String.format:
  * String.format("%.1f", 1.23456)
- *
- * байт	Б	100	—	100	байт	B	Б	20
- * килобайт	Кбайт	103	кило-	103	кибибайт	KiB	КиБ	210
- * мегабайт	Мбайт	106	мега-	106	мебибайт	MiB	МиБ	220
- * гигабайт	Гбайт	109	гига-	109	гибибайт	GiB	ГиБ	230
- * терабайт	Тбайт	1012	тера-	1012	тебибайт	TiB	ТиБ	240
- * петабайт	Пбайт	1015	пета-	1015	пебибайт	PiB	ПиБ	250
- * эксабайт	Эбайт	1018	экса-	1018	эксбибайт	EiB	ЭиБ	260
- * зеттабайт	Збайт	1021	зетта-	1021	зебибайт	ZiB	ЗиБ	270
- * йоттабайт	Ибайт	1024	йотта-	1024	йобибайт	YiB	ЙиБ	280
  */
 
 public class problem_1_2 {
     static final int BYTE_SIZE = 1024;
+    static final String[] BYTE_NAMES = new String[] {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    
     public static void main(String[] args) {
         printBytes(23);
         printBytes(1024);
-        printBytes(53692044905543d);
+        printBytes(53692044905543l);
     }
 
-    public static void printBytes(double bytes) {
-        String[] bytesNames = new String[] {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    public static void printBytes(long bytes) {
         int bytesNamesIndex = getIndex(bytes);
-        double value = bytes / Math.pow(1024, bytesNamesIndex); //bytes < 1024 ? bytes : bytes / 1024;
-//        Math.pow(1024, bytesNamesIndex);
-        String output = String.format("%.1f", value) + " " + bytesNames[bytesNamesIndex];
+        double value = bytes / Math.pow(BYTE_SIZE, bytesNamesIndex); 
+        String output = String.format("%.1f", value) + " " + BYTE_NAMES[bytesNamesIndex];
         System.out.println(output);
     }
 
-    public static int getIndex(double bytes) {
+    public static int getIndex(long bytes) {
         if (bytes < BYTE_SIZE) {
             return 0;
         } else {
