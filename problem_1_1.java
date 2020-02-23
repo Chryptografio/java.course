@@ -30,8 +30,13 @@ public class problem_1_1 {
     }
 
     private static void changeArray(int[] arr) {
+        if (arr.length == 0) {
+            return;
+        }
+        
         int maxIndex = 0;
         int minIndex = 0;
+        
         for (int i = 1; i < arr.length; i++) {
             if (arr[i] > arr[maxIndex]) {
                 maxIndex = i;
