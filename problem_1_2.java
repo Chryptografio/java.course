@@ -28,12 +28,14 @@ public class problem_1_2 {
     }
 
     public static void printBytes(long bytes) {
-        int bytesNamesIndex = getIndex(bytes);
+        // int bytesNamesIndex = getIndex(bytes); if recursion is used
+        int bytesNamesIndex = (int) Math.floor(Math.log(bytes) / Math.log(BYTE_SIZE));
         double value = bytes / Math.pow(BYTE_SIZE, bytesNamesIndex); 
         String output = String.format("%.1f", value) + " " + BYTE_NAMES[bytesNamesIndex];
         System.out.println(output);
     }
-
+    
+    /*
     public static int getIndex(long bytes) {
         if (bytes < BYTE_SIZE) {
             return 0;
@@ -41,4 +43,5 @@ public class problem_1_2 {
             return getIndex(bytes / BYTE_SIZE) + 1;
         }
     }
+    */
 }
