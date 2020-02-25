@@ -48,7 +48,17 @@ public class problem_1_1 {
 
         int minValue = arr[minIndex];
         int maxValue = arr[maxIndex];
-
+        
+        arr[minIndex] = arr[0];
+        if (maxIndex != 0) {
+            arr[maxIndex] = arr[arr.length - 1];
+        } else {
+            arr[minIndex] = arr[arr.length - 1];
+        }
+        arr[0] = minValue;
+        arr[arr.length - 1] = maxValue;
+        
+        /*
         for (int i = Math.max(minIndex, maxIndex); i < arr.length - 1; i++) {
             arr[i] = arr[i + 1];
         }
@@ -57,6 +67,7 @@ public class problem_1_1 {
         }
         arr[0] = minValue;
         arr[arr.length - 1] = maxValue;
+        */
     }
 
     private static void displayArray(int[] arr) {
