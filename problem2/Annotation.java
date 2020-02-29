@@ -38,6 +38,12 @@ public class Annotation {
     private String caption;
     private Figure figure;
     Annotation (String caption, Figure figure) {
+        if (caption.length() == 0) {
+            throw new Error("Please provide a caption.");
+        }
+        if (figure == null) {
+            throw new Error("Please provide a figure.");
+        }
         this.caption = caption;
         this.figure = figure;
     }

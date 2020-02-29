@@ -1,7 +1,7 @@
 package com.problem2;
 
-public class Circle extends Figure implements Moveable {
-    int xCenter, yCenter, radius;
+public class Circle extends Figure {
+    private int xCenter, yCenter, radius;
 
     Circle (int xCenter, int yCenter, int radius) {
         if (xCenter < 0 || yCenter < 0 || radius < 0) {
@@ -23,5 +23,17 @@ public class Circle extends Figure implements Moveable {
     public void move(int dx, int dy) {
         this.xCenter += dx;
         this.yCenter += dy;
+    }
+
+    public int getxCenter() {
+        return xCenter;
+    }
+
+    public int getyCenter() {
+        return yCenter;
+    }
+
+    public int getRadius() {
+        return radius;
     }
 }
