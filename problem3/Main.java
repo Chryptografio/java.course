@@ -2,6 +2,11 @@ package com.problem3;
 
 public class Main {
     public static String isValidKnightMoves (ChessBoardPosition[] sequence) {
+        for (ChessBoardPosition element : sequence) {
+            if(element == null) {
+                throw new IllegalArgumentException();
+            }
+        }
         if (sequence.length == 0 || sequence.length == 1) {
             return "Nowhere to move";
         }
