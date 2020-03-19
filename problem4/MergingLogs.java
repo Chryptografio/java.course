@@ -39,26 +39,23 @@ public class MergingLogs {
     }
 
     public static void mergeLogs(String[] logFiles) throws IOException {
-        Scanner[] scanners = new Scanner[logFiles.length];
-        String[] logs = new String[logFiles.length];
-//        Path file = Paths.get("answer.txt");
-//        Charset charset = StandardCharsets.UTF_8;
-//        BufferedWriter writer = null;
+        int n = logFiles.length;
+        Scanner[] scanners = new Scanner[n];
+        String[] logs = new String[n];
 
         try {
-//            writer = Files.newBufferedWriter(file, charset);
 
-            for (int i = 0, n = logFiles.length; i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 scanners[i] = new Scanner(new BufferedReader(new FileReader(logFiles[i])));
                 if(scanners[i].hasNextLine()) {
                     logs[i] = scanners[i].nextLine();
                 }
             }
 
-            while (!noMoreLogs(logs)) {
-                long[] times = new long[logFiles.length];
+            while (hasLogs(logs)) {
+                long[] times = new long[n];
                 int min = 0;
-                for (int i = 0, n = logFiles.length; i < n; i++) {
+                for (int i = 0; i < n; i++) {
                     if (logs[i] != null) {
                         if (logs[min] == null) min = i;
                         times[i] = Long.parseLong(logs[i].split(" ")[0]);
@@ -70,7 +67,6 @@ public class MergingLogs {
                 }
 
                 if (logs[min] != null) {
-//                    writer.write(logs[min] + "\n");
                     System.out.println(logs[min]);
                     if (scanners[min].hasNextLine()) {
                         logs[min] = scanners[min].nextLine();
@@ -82,20 +78,19 @@ public class MergingLogs {
             }
 
         } finally {
-            for (int i = 0, n = logFiles.length; i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 if(scanners[i] != null) {
                     scanners[i].close();
                 }
             }
-//            if (writer != null) writer.close();
         }
     }
 
-    static private boolean noMoreLogs(String[] logs) {
+    static private boolean hasLogs(String[] logs) {
         for (int i = 0, n = logs.length; i < n; i++) {
-            if (logs[i] != null) return false;
+            if (logs[i] != null) return true;
         }
-        return true;
+        return false;
     }
 
     static public void createLogFiles(int n) throws IOException{

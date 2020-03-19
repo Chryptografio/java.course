@@ -12,10 +12,11 @@ import java.util.Scanner;
  */
 public class WordCount {
     public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("No file was provided.");
+        }
         try {
             wordCount(args[0]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("No file was provided.");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
