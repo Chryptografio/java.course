@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Scanner;
 
 public class ConcurrentCalls {
     public static void main(String[] args) {
-        if (args.length < 0) {
+        if (args.length < 1) {
             System.out.println("No file was provided.");
             return;
         }
@@ -44,48 +45,40 @@ public class ConcurrentCalls {
 
     public static int findPeak (Path path) throws IOException {
         Scanner s = null;
-        int startAt = 0;
-        int max = 0;
-        int n;
+        int[] times = new int[86400000];
+        long startAt = 0L;
         long a, b;
-        boolean nextIterationPossible = true;
 
-        while (nextIterationPossible) {
-            a = 0;
-            b = Long.MAX_VALUE;
-            try {
-                s = new Scanner(new BufferedReader(new FileReader(path.toString())));
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(path.toString())));
 
-                for (int i = 0; i < startAt; i++) {
-                    s.nextLine();
+            if (s.hasNextLine()) {
+                String str = s.nextLine();
+                a = Long.parseLong(str.split(",")[0]);
+                b = Long.parseLong(str.split(",")[1]);
+                startAt = a;
+                for (int i = 0; i <= (int)(b-a); i++) {
+                    times[i + (int)(a - startAt)]++;
                 }
+            }
 
-                if (!s.hasNextLine()) {
-                    nextIterationPossible = false;
+            while (s.hasNextLine()) {
+                String str = s.nextLine();
+                a = Long.parseLong(str.split(",")[0]);
+                b = Long.parseLong(str.split(",")[1]);
+                for (int i = 0; i <= (int)(b-a); i++) {
+                    times[i + (int)(a - startAt)]++;
                 }
+            }
 
-                n = 0;
-
-                while (s.hasNextLine() && a <= b) {
-                    String str = s.nextLine();
-                    a = Long.parseLong(str.split(",")[0]);
-                    if (Long.parseLong(str.split(",")[1]) < b) {
-                        b = Long.parseLong(str.split(",")[1]);
-                    }
-                    n++;
-                }
-
-                if (n > max) max = n;
-
-                startAt++;
-            } finally {
-                if (s != null) {
-                    s.close();
-                }
+        } finally {
+            if (s != null) {
+                s.close();
             }
         }
 
-        return max;
+        Arrays.sort(times);
+        return times[times.length - 1];
     }
-    
+
 }
