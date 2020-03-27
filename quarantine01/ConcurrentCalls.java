@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -33,25 +35,48 @@ import java.util.Scanner;
 public class ConcurrentCalls {
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("No file was provided.");
-            return;
+            System.err.println("No file was provided.");
+            System.exit(1);
         }
         try {
-            System.out.println(findPeak(Paths.get(args[0])));
+            System.out.println(findPeakUpd(Paths.get(args[0])));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
     }
 
     public static int findPeak (Path path) throws IOException {
         Scanner s = null;
-        int[] times = new int[86400000];
         long startAt = 0L;
-        long a, b;
+        long a, b, min = Long.MIN_VALUE, max = Long.MAX_VALUE;
+        int[] times;
 
         try {
             s = new Scanner(new BufferedReader(new FileReader(path.toString())));
 
+            if (s.hasNextLine()) {
+                String str = s.nextLine();
+                min = Long.parseLong(str.split(",")[0]);
+                max = Long.parseLong(str.split(",")[1]);
+
+                while (s.hasNextLine()) {
+                    str = s.nextLine();
+                    a = Long.parseLong(str.split(",")[0]);
+                    b = Long.parseLong(str.split(",")[1]);
+                    min = Math.min(a, min);
+                    max = Math.max(b, max);
+                }
+            }
+        } finally {
+            if (s != null) {
+                s.close();
+            }
+        }
+
+        times = new int[(int)(max - min) + 1];
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(path.toString())));
             if (s.hasNextLine()) {
                 String str = s.nextLine();
                 a = Long.parseLong(str.split(",")[0]);
@@ -70,15 +95,46 @@ public class ConcurrentCalls {
                     times[i + (int)(a - startAt)]++;
                 }
             }
+        } finally {
+            s.close();
+        }
+        Arrays.sort(times);
+        return times[times.length - 1];
 
+    }
+
+    public static int findPeakUpd (Path path) throws IOException {
+        Scanner s = null;
+        long a;
+        int max = 0, n = 0;
+        ArrayList<Long> timesList = new ArrayList<>();
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(path.toString())));
+            while (s.hasNextLine()) {
+                String str = s.nextLine();
+                timesList.add(Long.parseLong(str.split(",")[1]));
+            }
+            Collections.sort(timesList);
+            s.close();
+            s = new Scanner(new BufferedReader(new FileReader(path.toString())));
+            while (s.hasNextLine()) {
+                String str = s.nextLine();
+                a = Long.parseLong(str.split(",")[0]);
+                while (a > timesList.get(0)) {
+                    n--;
+                    timesList.remove(0);
+                }
+                n++;
+                if (n > max) {
+                    max = n;
+                }
+            }
         } finally {
             if (s != null) {
                 s.close();
             }
         }
-
-        Arrays.sort(times);
-        return times[times.length - 1];
+        return max;
     }
 
 }
